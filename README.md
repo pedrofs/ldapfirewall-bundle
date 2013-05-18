@@ -1,7 +1,4 @@
-README
+[RHECK] LDAP Firewall Bundle
 ======
 
-It is not ready yet
------------------
-
-* Do not download this bundle yet. *
+* Bundle in develop stage.
