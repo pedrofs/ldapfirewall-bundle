@@ -1,4 +1,7 @@
-ldapfirewall-bundle
-===================
+README
+======
 
-LDAP Bundle is a Symfony Bundle to authenticate user with a LDAP server
+It is not ready yet
+-----------------
+
+* Do not download this bundle yet. *

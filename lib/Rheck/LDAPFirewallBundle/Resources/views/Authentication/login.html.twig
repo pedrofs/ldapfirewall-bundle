@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <title>LDAP Login</title>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" media="screen" href="{{ asset('bundles/rheckldapfirewall/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" media="screen" href="{{ asset('bundles/rheckldapfirewall/css/bootstrap-responsive.min.css') }}">
+        {% endblock %}
+
+        <style type="text/css">
+            body { padding-top:50px; }
+            .alert p { margin:0; }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span4 offset4">
+                    <form class="form-vertical" action="{{ path('_rheck_ldap_logincheck') }}" method="POST">
+                        <legend>Login Access</legend>
+                        {% if error %}
+                            <div class="alert alert-error">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                {{ error }}
+                            </div>
+                        {% endif %}
+                        <div class="control-group">
+                            <label class="control-label" for="identity">Username</label>
+                            <div class="controls">
+                                <input type="text" id="identity" name="login[_username]" value="{{ lastUsername }}" class="span12">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="password">Password</label>
+                            <div class="controls">
+                                <input type="password" id="password" name="login[_password]" class="span12">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Log in</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% block scripts %}
+            <script type="text/javascript" src="{{ asset('bundles/rheckldapfirewall/js/jquery-1.9.1.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/rheckldapfirewall/js/bootstrap.min.js') }}"></script>
+        {% endblock %}
+
+        <script type="text/javascript">
+            $('input, select, textarea').filter(':visible:first').focus();
+        </script>
+    </body>
+</html>

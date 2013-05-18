@@ -1,0 +1,12 @@
+parameters:
+  ldap.security.authentication.provider.class: Rheck\LDAPFirewallBundle\Authentication\Provider\LDAPProvider
+  ldap.security.authentication.listener.class: Rheck\LDAPFirewallBundle\Firewall\LDAPListener
+
+services:
+  ldap.security.authentication.provider:
+    class:     %ldap.security.authentication.provider.class%
+    arguments: ['', %kernel.cache_dir%/security/nonces]
+
+  ldap.security.authentication.listener:
+    class:     %ldap.security.authentication.listener.class%
+    arguments: [@security.context, @security.authentication.manager, @session, @router, @service_container]

@@ -1,0 +1,4 @@
+_rheck_ldapfirewall_annotation_controllers:
+    resource: "@RheckLDAPFirewallBundle/Controller"
+    type:     annotation
+    prefix:   /auth

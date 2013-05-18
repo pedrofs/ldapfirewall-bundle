@@ -1,0 +1,13 @@
+{
+    "name": "rheck/ldapfirewall-bundle",
+    "description": "Bundle to connect user with LDAP server.",
+    "require": {
+        "php": ">= 5.3.3",
+        "symfony/symfony": "2.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "RHeck\\LDAPFirewallBundle\\": "lib/"
+        }
+    }
+}
