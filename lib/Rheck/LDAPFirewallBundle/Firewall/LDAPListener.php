@@ -19,6 +19,8 @@ class LDAPListener implements ListenerInterface
     protected $securityContext;
     protected $ldapCredentials;
     protected $authenticationManager;
+    protected $router;
+    protected $kernel;
     protected $allowedRoutes = array(
         '_rheck_ldap_login',
         '_rheck_ldap_logincheck'
@@ -30,6 +32,7 @@ class LDAPListener implements ListenerInterface
         $this->authenticationManager = $authenticationManager;
         $this->session = $session;
         $this->router = $router;
+        $this->kernel = $kernel;
 
         $this->ldapCredentials = array(
             'ldap' => array(
@@ -46,8 +49,7 @@ class LDAPListener implements ListenerInterface
 
         if (!$this->session->has('LDAP_LOGIN_CALLBACK')) {
             if (in_array($currentRoute, $this->allowedRoutes)) {
-                // TODO: get the default url
-                $this->session->set('LDAP_LOGIN_CALLBACK', '_conradcaine_frontend_default_index');
+                $this->session->set('LDAP_LOGIN_CALLBACK', $this->kernel->getParameter('rheck_ldap_firewall.default_url'));
             } else {
                 $this->session->set('LDAP_LOGIN_CALLBACK', $currentRoute);
             }
@@ -58,7 +60,8 @@ class LDAPListener implements ListenerInterface
         }
 
         if (!$this->session->has('LDAP_LOGIN')) {
-            $event->setResponse(RedirectResponse::create($this->router->generate('_rheck_ldap_login')));
+            $loginUrl = $this->router->generate($this->kernel->getParameter('rheck_ldap_firewall.login_url'));
+            $event->setResponse(RedirectResponse::create($loginUrl));
             return;
         }
 
