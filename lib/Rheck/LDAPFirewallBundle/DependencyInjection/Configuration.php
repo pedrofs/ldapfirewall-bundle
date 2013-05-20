@@ -15,8 +15,13 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->scalarNode('default_url')->defaultValue('')->end()
             ->scalarNode('login_url')->defaultValue('_rheck_ldap_login')->end()
-            ->scalarNode('ldap_host')->defaultValue('')->end()
-            ->scalarNode('ldap_dn')->defaultValue('')->end()
+            ->arrayNode('ldap')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('host')->defaultValue('')->end()
+                    ->scalarNode('dn')->defaultValue('')->end()
+                ->end()
+            ->end()
             ->end()
         ;
 

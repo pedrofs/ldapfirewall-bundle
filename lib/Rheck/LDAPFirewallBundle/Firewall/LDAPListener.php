@@ -36,8 +36,8 @@ class LDAPListener implements ListenerInterface
 
         $this->ldapCredentials = array(
             'ldap' => array(
-                'host' => $kernel->getParameter('rheck_ldap_firewall.ldap_host'),
-                'dn'   => $kernel->getParameter('rheck_ldap_firewall.ldap_dn'),
+                'host' => $kernel->getParameter('rheck_ldap_firewall.ldap.host'),
+                'dn'   => $kernel->getParameter('rheck_ldap_firewall.ldap.dn'),
             )
         );
     }

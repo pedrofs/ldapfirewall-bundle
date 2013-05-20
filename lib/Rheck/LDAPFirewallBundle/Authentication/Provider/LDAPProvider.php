@@ -31,7 +31,7 @@ class LDAPProvider implements AuthenticationProviderInterface
         ldap_set_option($ldapConnection, LDAP_OPT_REFERRALS, 0);
 
         if ($ldapConnection) {
-            $ldapDn = str_replace('USER_CREDENTIAL', $ldapUserCredentials['username'], $ldapCredentials['ldap']['dn']);
+            $ldapDn = str_replace('USERNAME', $ldapUserCredentials['username'], $ldapCredentials['ldap']['dn']);
 
             $ldapBind = ldap_bind($ldapConnection, $ldapDn, $ldapUserCredentials['password']);
 
