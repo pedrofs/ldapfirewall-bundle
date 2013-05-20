@@ -7,7 +7,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Config\FileLocator;
 
-class RHeckLDAPFirewallExtension extends Extension
+class RheckLDAPFirewallExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
