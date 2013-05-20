@@ -7,7 +7,7 @@
     },
     "autoload": {
         "psr-0": {
-            "RHeck\\LDAPFirewallBundle\\": "lib/"
+            "Rheck\\LDAPFirewallBundle\\": "lib/"
         }
     }
 }
