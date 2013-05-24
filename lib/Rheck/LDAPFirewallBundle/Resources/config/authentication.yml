@@ -5,7 +5,7 @@ parameters:
 services:
   ldap.security.authentication.provider:
     class:     %ldap.security.authentication.provider.class%
-    arguments: ['', %kernel.cache_dir%/security/nonces]
+    arguments: ['', %kernel.cache_dir%/security/nonces, @conradcaine.core.entity.library]
 
   ldap.security.authentication.listener:
     class:     %ldap.security.authentication.listener.class%

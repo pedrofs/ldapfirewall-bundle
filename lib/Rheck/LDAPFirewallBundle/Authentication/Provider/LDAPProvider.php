@@ -11,13 +11,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class LDAPProvider implements AuthenticationProviderInterface
 {
 
+    protected $entityLibrary;
     protected $userProvider;
     protected $cacheDir;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir)
+    public function __construct(UserProviderInterface $userProvider, $cacheDir, EntityLibrary $entityLibrary)
     {
-        $this->userProvider = $userProvider;
-        $this->cacheDir     = $cacheDir;
+        $this->userProvider  = $userProvider;
+        $this->cacheDir      = $cacheDir;
+        $this->entityLibrary = $entityLibrary;
     }
 
     public function authenticate(TokenInterface $token)
@@ -42,10 +44,19 @@ class LDAPProvider implements AuthenticationProviderInterface
                 if (is_array($ldapEntry) && isset($ldapEntry['count']) && $ldapEntry['count']) {
                     $ldapUserObject = $ldapEntry[0];
 
-                    $user = $this->userProvider->loadUserByUsername($ldapUserCredentials['username']);
-                    
+                    $user = $this->entityLibrary->get('User')->findOneByUsername($ldapUserCredentials['username']);
+
                     if (!$user) {
-                        throw new AuthenticationException('The user was found on LDAP but don\'t exist on system.');
+                        $roleGeneral = $this->entityLibrary->get('Role')->findOneByName('ROLE_GENERAL');
+
+                        $user = new User();
+                        $user->setName($ldapUserObject['cn'][0] . ' ' . $ldapUserObject['sn'][0]);
+                        $user->setEmail($ldapUserObject['mail'][0]);
+                        $user->setUsername($ldapUserCredentials['username']);
+                        $user->setSalt(uniqid());
+                        $user->addRole($roleGeneral);
+
+                        $this->entityLibrary->get('User')->save($user);
                     }
 
                     $authenticatedToken = new LDAPToken($user->getRoles());
