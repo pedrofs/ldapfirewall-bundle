@@ -49,7 +49,8 @@ class LDAPProvider implements AuthenticationProviderInterface
                     $user = $this->entityLibrary->get('User')->findOneByUsername($ldapUserCredentials['username']);
 
                     if (!$user) {
-                        $roleGeneral = $this->entityLibrary->get('Role')->findOneByName('ROLE_GENERAL');
+                        $roleGeneral  = $this->entityLibrary->get('Role')->findOneByName('ROLE_GENERAL');
+                        $groupGeneral = $this->entityLibrary->get('UserGroup')->findOneByName('General');
 
                         $user = new User();
                         $user->setName($ldapUserObject['cn'][0] . ' ' . $ldapUserObject['sn'][0]);
@@ -57,6 +58,7 @@ class LDAPProvider implements AuthenticationProviderInterface
                         $user->setUsername($ldapUserCredentials['username']);
                         $user->setSalt(uniqid());
                         $user->addRole($roleGeneral);
+                        $user->addUserGroup($groupGeneral);
 
                         $this->entityLibrary->get('User')->save($user);
                     }
