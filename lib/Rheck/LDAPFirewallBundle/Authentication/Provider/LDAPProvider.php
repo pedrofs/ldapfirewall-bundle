@@ -6,6 +6,7 @@ use Rheck\LDAPFirewallBundle\Authentication\Token\LDAPToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\NonceExpiredException;
+use ConradCaine\Core\Library\EntityBundle\Manager\EntityLibrary;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class LDAPProvider implements AuthenticationProviderInterface
