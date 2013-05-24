@@ -1,6 +1,7 @@
 <?php
 namespace Rheck\LDAPFirewallBundle\Authentication\Provider;
 
+use ConradCaine\Core\Library\EntityBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Rheck\LDAPFirewallBundle\Authentication\Token\LDAPToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
