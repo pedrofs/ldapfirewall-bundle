@@ -19,6 +19,7 @@ class RheckLDAPFirewallExtension extends Extension
         $container->setParameter('rheck_ldap_firewall.login_url', $config['login_url']);
         $container->setParameter('rheck_ldap_firewall.ldap.host', $config['ldap']['host']);
         $container->setParameter('rheck_ldap_firewall.ldap.dn', $config['ldap']['dn']);
+        $container->setParameter('rheck_ldap_firewall.ldap.roleDn', $config['ldap']['roleDn']);
 
         $loader = new Loader\YamlFileLoader(
             $container,

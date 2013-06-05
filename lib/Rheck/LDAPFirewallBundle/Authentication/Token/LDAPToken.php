@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 class LDAPToken extends AbstractToken
 {
     protected $ldapUserCredentials;
-    protected $ldapCredentials;
 
     public function __construct(array $roles = array())
     {
@@ -31,13 +30,4 @@ class LDAPToken extends AbstractToken
         return $this->ldapUserCredentials;
     }
 
-    public function setLDAPCredentials($ldapCredentials)
-    {
-        $this->ldapCredentials = $ldapCredentials;
-    }
-
-    public function getLDAPCredentials()
-    {
-        return $this->ldapCredentials;
-    }
 }

@@ -1,12 +1,17 @@
 parameters:
-  ldap.security.authentication.provider.class: Rheck\LDAPFirewallBundle\Authentication\Provider\LDAPProvider
-  ldap.security.authentication.listener.class: Rheck\LDAPFirewallBundle\Firewall\LDAPListener
+  ldap.security.authentication.provider.class:     Rheck\LDAPFirewallBundle\Authentication\Provider\LDAPProvider
+  ldap.security.authentication.listener.class:     Rheck\LDAPFirewallBundle\Firewall\LDAPListener
+  ldap.security.authentication.ldap.service.class: Rheck\LDAPFirewallBundle\Service\LDAPService
 
 services:
   ldap.security.authentication.provider:
     class:     %ldap.security.authentication.provider.class%
-    arguments: ['', %kernel.cache_dir%/security/nonces, @conradcaine.core.entity.library]
+    arguments: ['', %kernel.cache_dir%/security/nonces, @conradcaine.core.entity.library, @ldap.security.authentication.ldap.service]
 
   ldap.security.authentication.listener:
     class:     %ldap.security.authentication.listener.class%
     arguments: [@security.context, @security.authentication.manager, @session, @router, @service_container]
+
+  ldap.security.authentication.ldap.service:
+    class:     '%ldap.security.authentication.ldap.service.class%'
+    arguments: [@service_container]

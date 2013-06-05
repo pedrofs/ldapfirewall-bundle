@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 class LDAPListener implements ListenerInterface
 {
 
-    protected $session;
-    protected $securityContext;
-    protected $ldapCredentials;
     protected $authenticationManager;
+    protected $securityContext;
+    protected $session;
     protected $router;
     protected $kernel;
+
     protected $allowedRoutes = array(
         '_rheck_ldap_login',
         '_rheck_ldap_logincheck'
@@ -33,13 +33,6 @@ class LDAPListener implements ListenerInterface
         $this->session = $session;
         $this->router = $router;
         $this->kernel = $kernel;
-
-        $this->ldapCredentials = array(
-            'ldap' => array(
-                'host' => $kernel->getParameter('rheck_ldap_firewall.ldap.host'),
-                'dn'   => $kernel->getParameter('rheck_ldap_firewall.ldap.dn'),
-            )
-        );
     }
 
     public function handle(GetResponseEvent $event)
@@ -70,7 +63,6 @@ class LDAPListener implements ListenerInterface
         $token = new LDAPToken();
         $token->setUser('ldap_proxy_user');
         $token->setLDAPUserCredentials($ldapUserCredentials);
-        $token->setLDAPCredentials($this->ldapCredentials);
 
         try {
             $authToken = $this->authenticationManager->authenticate($token);

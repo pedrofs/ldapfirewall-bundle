@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('host')->defaultValue('')->end()
                     ->scalarNode('dn')->defaultValue('')->end()
+                    ->scalarNode('roleDn')->defaultValue('')->end()
                 ->end()
             ->end()
             ->end()

@@ -2,6 +2,7 @@
 namespace Rheck\LDAPFirewallBundle\Authentication\Provider;
 
 use ConradCaine\Core\Library\EntityBundle\Entity\User;
+use Rheck\LDAPFirewallBundle\Service\LDAPService;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Rheck\LDAPFirewallBundle\Authentication\Token\LDAPToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -15,33 +16,28 @@ class LDAPProvider implements AuthenticationProviderInterface
 
     protected $entityLibrary;
     protected $userProvider;
+    protected $ldapService;
     protected $cacheDir;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir, EntityLibrary $entityLibrary)
+    public function __construct(UserProviderInterface $userProvider, $cacheDir, EntityLibrary $entityLibrary, LDAPService $ldapService)
     {
         $this->userProvider  = $userProvider;
         $this->cacheDir      = $cacheDir;
         $this->entityLibrary = $entityLibrary;
+        $this->ldapService   = $ldapService;
     }
 
     public function authenticate(TokenInterface $token)
     {
         $ldapUserCredentials = $token->getLDAPUserCredentials();
-        $ldapCredentials     = $token->getLDAPCredentials();
 
-        $ldapConnection = ldap_connect($ldapCredentials['ldap']['host']);
-
-        ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3);
-        ldap_set_option($ldapConnection, LDAP_OPT_REFERRALS, 0);
+        $ldapConnection = $this->ldapService->getConnection();
 
         if ($ldapConnection) {
-            $ldapDn = str_replace('USERNAME', $ldapUserCredentials['username'], $ldapCredentials['ldap']['dn']);
-
-            $ldapBind = ldap_bind($ldapConnection, $ldapDn, $ldapUserCredentials['password']);
+            $ldapBind = $this->ldapService->bind($ldapConnection, $ldapUserCredentials['username'], $ldapUserCredentials['password']);
 
             if (true === $ldapBind) {
-                $ldapRead  = ldap_read($ldapConnection, $ldapDn, "(objectclass=*)", array('ou', 'sn', 'cn', 'mail'));
-                $ldapEntry = ldap_get_entries($ldapConnection, $ldapRead);
+                $ldapEntry = $this->ldapService->read($ldapConnection, "uid=" . $ldapUserCredentials['username'] . "," . $this->ldapService->getDn(), "(objectclass=*)", array('ou', 'sn', 'cn', 'mail'));
 
                 if (is_array($ldapEntry) && isset($ldapEntry['count']) && $ldapEntry['count']) {
                     $ldapUserObject = $ldapEntry[0];
@@ -66,7 +62,6 @@ class LDAPProvider implements AuthenticationProviderInterface
                     $authenticatedToken = new LDAPToken($user->getRoles());
                     $authenticatedToken->setUser($user);
                     $authenticatedToken->setLDAPUserCredentials($ldapUserCredentials);
-                    $authenticatedToken->setLDAPCredentials($ldapCredentials);
 
                     return $authenticatedToken;
                 }
