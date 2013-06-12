@@ -59,12 +59,12 @@ class AuthenticationController extends Controller {
             )
         );
 
-        if ($session->has('LDAP_LOGIN_CALLBACK')) {
-            $callbackUrl = $session->get('LDAP_LOGIN_CALLBACK');
-            $session->remove('LDAP_LOGIN_CALLBACK');
-
-            return $this->redirect($this->generateUrl($callbackUrl));
-        }
+//        if ($session->has('LDAP_LOGIN_CALLBACK')) {
+//            $callbackUrl = $session->get('LDAP_LOGIN_CALLBACK');
+//            $session->remove('LDAP_LOGIN_CALLBACK');
+//
+//            return $this->redirect($this->generateUrl($callbackUrl));
+//        }
 
         $defaultUrl = $this->container->getParameter('rheck_ldap_firewall.default_url');
         return $this->redirect($this->generateUrl($defaultUrl));
