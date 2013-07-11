@@ -1,14 +1,13 @@
 <?php
 namespace Rheck\LDAPFirewallBundle\Authentication\Provider;
 
-use ConradCaine\Core\Library\EntityBundle\Entity\User;
 use Rheck\LDAPFirewallBundle\Service\LDAPService;
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Rheck\LDAPFirewallBundle\Authentication\Token\LDAPToken;
+use Rheck\LDAPFirewallBundle\Factory\UserFactoryInterface;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\NonceExpiredException;
-use ConradCaine\Core\Library\EntityBundle\Manager\EntityLibrary;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class LDAPProvider implements AuthenticationProviderInterface
@@ -18,13 +17,19 @@ class LDAPProvider implements AuthenticationProviderInterface
     protected $userProvider;
     protected $ldapService;
     protected $cacheDir;
+    protected $userFactory;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir, EntityLibrary $entityLibrary, LDAPService $ldapService)
+    public function __construct(UserProviderInterface $userProvider,
+                                $cacheDir,
+                                EntityLibraryInterface $entityLibrary,
+                                LDAPService $ldapService,
+                                UserFactoryInterface $userFactory)
     {
         $this->userProvider  = $userProvider;
         $this->cacheDir      = $cacheDir;
         $this->entityLibrary = $entityLibrary;
         $this->ldapService   = $ldapService;
+        $this->userFactory   = $userFactory;
     }
 
     public function authenticate(TokenInterface $token)
@@ -48,7 +53,7 @@ class LDAPProvider implements AuthenticationProviderInterface
                         $roleGeneral  = $this->entityLibrary->get('Role')->findOneByName('ROLE_GENERAL');
                         $groupGeneral = $this->entityLibrary->get('UserGroup')->findOneByName('General');
 
-                        $user = new User();
+                        $user = $this->userFactory->get();
                         $user->setName($ldapUserObject['cn'][0] . ' ' . $ldapUserObject['sn'][0]);
                         $user->setEmail($ldapUserObject['mail'][0]);
                         $user->setUsername($ldapUserCredentials['username']);

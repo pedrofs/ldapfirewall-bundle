@@ -6,7 +6,7 @@ parameters:
 services:
   ldap.security.authentication.provider:
     class:     %ldap.security.authentication.provider.class%
-    arguments: ['', %kernel.cache_dir%/security/nonces, @conradcaine.core.entity.library, @ldap.security.authentication.ldap.service]
+    arguments: ['', %kernel.cache_dir%/security/nonces, @conradcaine.core.entity.library, @ldap.security.authentication.ldap.service, @ldap.security.authentication.user.factory]
 
   ldap.security.authentication.listener:
     class:     %ldap.security.authentication.listener.class%
@@ -15,3 +15,9 @@ services:
   ldap.security.authentication.ldap.service:
     class:     '%ldap.security.authentication.ldap.service.class%'
     arguments: [@service_container]
+
+  # You should provide that service by your own.
+  # It must be an implementation of RHeck\LDAPFirewallBundle\Factory.
+  #
+  # ldap.security.authentication.user.factory:
+  #   class: Your\NameSpace\UserFactory
